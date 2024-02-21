@@ -16,28 +16,39 @@ import java.util.Scanner;
 public class ArithmeticBase {
     public double x, y;
 
-    enum Operation {
-        PLUS,
-        MINUS,
-        TIMES,
-        DIVIDE
+    public enum Operation {
+        PLUS {
+            @Override
+            public double apply(double x, double y) {
+                return x + y;
+            }
+        },
+        MINUS {
+            @Override
+            public double apply(double x, double y) {
+                return x - y;
+            }
+        },
+        TIMES {
+            @Override
+            public double apply(double x, double y) {
+                return x * y;
+            }
+        },
+        DIVIDE {
+            @Override
+            public double apply(double x, double y) {
+                if (y == 0) {
+                    throw new ArithmeticException("Division by zero is not allowed");
+                }
+                return x / y;
+            }
+        };
+
+        public abstract double apply(double x, double y);
     }
 
-    double calculate(double x, double y) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter arithmetic operation to Perform (PLUS, MINUS, TIMES, DIVIDE): ");
-        Operation op = Operation.valueOf(sc.next().toUpperCase());
-        switch (op) {
-            case PLUS:
-                return x + y;
-            case MINUS:
-                return x - y;
-            case TIMES:
-                return x * y;
-            case DIVIDE:
-                return x / y;
-            default:
-                throw new AssertionError("Unknown operation " + op);
-        }
+    public double calculate(double x, double y, Operation op) {
+        return op.apply(x, y);
     }
 }
